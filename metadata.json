@@ -1,0 +1,29 @@
+{
+  "name": "ahead-reporting_servicenow",
+  "version": "1.2.0",
+  "author": "AHEAD",
+  "summary": "Send Puppet corrective change reports to open ServiceNOW tickets",
+  "license": "Apache-2.0",
+  "source": "https://github.com/AheadAviation/reporting_servicenow.git",
+  "project_page": "https://github.com/AheadAviation/reporting_servicenow",
+  "issues_url": "https://github.com/AheadAviation/reporting_servicenow/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "puppetlabs-puppetserver_gem",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.7.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.18.0",
+  "template-url": "pdk-default#1.18.0",
+  "template-ref": "tags/1.18.0-0-g095317c"
+}
