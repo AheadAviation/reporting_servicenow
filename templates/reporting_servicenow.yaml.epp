@@ -1,0 +1,7 @@
+---
+api_url: <%= $reporting_servicenow::url%>
+console_url: <%= $reporting_servicenow::puppet_console %>
+debug: <%= $reporting_servicenow::debug %>
+# add servicenow username and password below
+username: PROVIDE_THE_SERVICENOW_USER
+password: PROVIDE_THE_PASSWORD
