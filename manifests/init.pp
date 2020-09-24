@@ -5,7 +5,7 @@
 # @param debug optional flag to activate debugging messages 
 
 class reporting_servicenow (
-  Stdlib::Httpsurl $url = 'https://instance.service-now.com/api/now/table/change_request?sysparm_fields=',
+  Stdlib::Httpsurl $url = 'https://instance.service-now.com/api/now/table/incident',
   Stdlib::Httpsurl $puppet_console = 'https://puppet.example.com',
   Boolean $debug = false
 ) {
@@ -33,7 +33,7 @@ class reporting_servicenow (
     group   => 'pe-puppet',
     mode    => '0644',
     replace => false,
-    content => epp("${module_name}/${module_name}.yaml.epp"),
+    content => epp("${module_name}/${module_name}.epp"),
   }
 
   # Needed to compile rest-client

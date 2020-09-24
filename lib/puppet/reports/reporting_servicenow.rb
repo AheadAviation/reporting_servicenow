@@ -59,7 +59,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
         u_risk_resources: '2',
         u_risk_backout: '3',
         u_risk_complex: '1',
-        work_notes: "Node Reports: [code]<a class='web' target='_blank' href='#{PUPPETCONSOLE}/#/node_groups/inventory/node/#{host}/reports'>Reports</a>[/code]\n#{line}",
+        work_notes: "Node Reports: [code]<a class='web' target='_blank' href='#{PUPPETCONSOLE}/#/inventory/node/#{host}/reports'>Reports</a>[/code]\n#{line}",
       }
 
       debug("payload:\n#{request_body_map}\n-----\n")
