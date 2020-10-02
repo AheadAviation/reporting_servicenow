@@ -33,7 +33,7 @@ class reporting_servicenow (
     group   => 'pe-puppet',
     mode    => '0644',
     replace => false,
-    content => epp("${module_name}/${module_name}.epp"),
+    content => epp("${module_name}/${module_name}.yamlepp"),
   }
 
   # Needed to compile rest-client
