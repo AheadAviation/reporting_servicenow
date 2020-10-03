@@ -52,7 +52,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
         short_description: "Puppet Corrective Change on #{host}",
         assignment_group: 'Service Desk',
         category: "#{CATEGORY}",
-        subcategiry: "#{SUBCATEGORY}",
+        subcategory: "#{SUBCATEGORY}",
         impact: '3',
         urgency: '3',
         risk: '3',
