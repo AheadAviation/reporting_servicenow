@@ -16,6 +16,8 @@ Puppet::Reports.register_report(:reporting_servicenow) do
   SN_PASSWORD = @config['password']
   PUPPETCONSOLE = @config['console_url']
   DEBUG = @config['debug']
+  CATEGORY = @config['category']
+  SUBCATEGORY = @config['subcategory']
 
   def debug(msg)
     timestamp = Time.now.utc.iso8601
@@ -37,6 +39,8 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       debug("SNOW PASS: #{SN_PASSWORD}")
       debug("Puppet Console: #{PUPPETCONSOLE}")
       debug("Puppet Master: #{whoami}")
+      debug("Category: #{CATEGORY}")
+      debug("Subcategory: #{SUBCATEGORY}")
 
       line = 'Change details:\n'
       logs.each do |log|
@@ -47,6 +51,8 @@ Puppet::Reports.register_report(:reporting_servicenow) do
         type: 'Standard',
         short_description: "Puppet Corrective Change on #{host}",
         assignment_group: 'Service Desk',
+        category: "#{CATEGORY}",
+        subcategiry: "#{SUBCATEGORY}",
         impact: '3',
         urgency: '3',
         risk: '3',
