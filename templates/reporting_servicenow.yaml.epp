@@ -2,6 +2,10 @@
 api_url: <%= $reporting_servicenow::url%>
 console_url: <%= $reporting_servicenow::puppet_console %>
 debug: <%= $reporting_servicenow::debug %>
+category: <%= $reporting_servicenow::category %>
+subcategory: <%= $reporting_servicenow::subcategory %>
+caller_id: <%= $reporting_servicenow::caller_id %>
+assignment_group: <%= $reporting_servicenow::assignment_group %>
 # add servicenow username and password below
-username: PROVIDE_THE_SERVICENOW_USER
-password: PROVIDE_THE_PASSWORD
+username: <%= $reporting_servicenow::username %>
+password: <%= unwrap($reporting_servicenow::password) %>

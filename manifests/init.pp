@@ -3,11 +3,23 @@
 # @param url URL for API integration
 # @param puppet_console URL of the Puppet Console
 # @param debug optional flag to activate debugging messages 
+# @param category ServiceNow incident category
+# @param subcategory ServiceNow incident subcategory
+# @param caller_id ServiceNow user sys_id for caller
+# @param assignment_group ServiceNow incident assignment group
+# @param username ServieNow user
+# @param password ServiceNow password
 
 class reporting_servicenow (
   Stdlib::Httpsurl $url = 'https://instance.service-now.com/api/now/table/incident',
   Stdlib::Httpsurl $puppet_console = 'https://puppet.example.com',
-  Boolean $debug = false
+  Boolean $debug = false,
+  String $category = 'software',
+  String $subcategory = 'Operating System',
+  String $caller_id = '',
+  String $assignment_group = 'Service Desk',
+  String $username = '',
+  Sensitive[String] $password = '',
 ) {
   pe_ini_setting { "${module_name}_enable_reports":
     ensure  => present,

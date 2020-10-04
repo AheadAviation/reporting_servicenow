@@ -18,6 +18,8 @@ Puppet::Reports.register_report(:reporting_servicenow) do
   DEBUG = @config['debug']
   CATEGORY = @config['category']
   SUBCATEGORY = @config['subcategory']
+  CALLERID = @config['caller_id']
+  ASSIGNMENTGROUP = @config['assignment_group']
 
   def debug(msg)
     timestamp = Time.now.utc.iso8601
@@ -41,6 +43,8 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       debug("Puppet Master: #{whoami}")
       debug("Category: #{CATEGORY}")
       debug("Subcategory: #{SUBCATEGORY}")
+      debug("Caller Id: #{CALLERID}")
+      debug("Assignment group: #{ASSIGNMENTGROUP}")
 
       line = 'Change details:\n'
       logs.each do |log|
@@ -50,9 +54,10 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       request_body_map = {
         type: 'Standard',
         short_description: "Puppet Corrective Change on #{host}",
-        assignment_group: 'Service Desk',
+        assignment_group: ASSIGNMENTGROUP.to_s,
         category: CATEGORY.to_s,
         subcategory: SUBCATEGORY.to_s,
+        caller_id: CALLERID.to_s,
         impact: '3',
         urgency: '3',
         risk: '3',
