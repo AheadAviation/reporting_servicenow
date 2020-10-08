@@ -1,14 +1,43 @@
 # @summary Send corrective changes to ServiceNOW
 #
-# @param username ServieNow username
-# @param password ServiceNow password
-# @param url URL for API integration
-# @param puppet_console URL of the Puppet Console
-# @param debug optional flag to activate debugging messages 
-# @param category ServiceNow incident category
-# @param subcategory ServiceNow incident subcategory
-# @param caller_id ServiceNow user sys_id for caller
-# @param assignment_group ServiceNow incident assignment group
+# A crrective change will result in an incident in ServiceNOW. The incident will be prefilled with
+# the data below.
+#
+# @param username 
+#    ServieNow username, must be able to open incidents, defaults to 'admin'
+#
+# @param password 
+#    ServiceNow password for the above user, needs to be eyaml encrypted
+#
+# @param url 
+#    SewrviceNow URL for API integration
+#
+# @param puppet_console 
+#    URL of the Puppet Console
+#
+# @param debug 
+#    optional flag to activate debugging messages 
+#
+# @param category 
+#    ServiceNow incident category, defaults to 'software'
+#
+# @param subcategory 
+#    ServiceNow incident subcategory, defaults to 'Operating System'
+#
+# @param caller_id 
+#    ServiceNow user sys_id for the user to be inserted as caller
+#
+# @param assignment_group 
+#    ServiceNow incident assignment group, defaults to 'Service Desk'
+#
+# @example
+#   class { 'reporting_servicenow':
+#     username       => 'admin',
+#     password       => 'EYaml encrypted very secret password',
+#     url            => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
+#     puppet_console => 'https://<YOUR CONSOLE HERE>',
+#   }
+#   
 
 class reporting_servicenow (
   Sensitive[String] $password,

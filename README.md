@@ -39,8 +39,11 @@ There are 4 steps to the reporting_servicenow configuration:
 
 ```puppet
 class { 'reporting_servicenow':
+  username       => 'your user',
+  password       => 'eyaml encrypted password',
   url            => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
   puppet_console => 'https://<YOUR CONSOLE HERE>',
+  caller_id      => '7816f79cc0a8017511c5a33be04be441',
 }
 ```
 
@@ -51,9 +54,12 @@ class { 'reporting_servicenow':
 api_url: "https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident"
 console_url: "https://<YOUR CONSOLE HERE>"
 debug: false
+category: 'software'
+subcategory: 'Operating System'
+caller_id: '7816f79cc0a8017511c5a33be04be441'
 # add servicenow username and password below
-username: PROVIDE_THE_SERVICENOW_USER
-password: PROVIDE_THE_PASSWORD
+username: 'your user'
+password: 'Eyaml decrypted password'
 ```
 
 * Edit /etc/puppetlabs/puppet/reporting_servicenow.yaml. (**NOTE: this file is only created once by puppet and then not
@@ -65,9 +71,12 @@ password: PROVIDE_THE_PASSWORD
 api_url: "https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident"
 console_url: "https://<YOUR CONSOLE HERE>"
 debug: false
+category: 'software'
+subcategory: 'Operating System'
+caller_id: '7816f79cc0a8017511c5a33be04be441'
 # add servicenow username and password below
-username: <SERVICENOW USER>
-password: <PASSWORD>
+username: 'your user'
+password: 'Eyaml decrypted password'
 ```
 
 * restart the puppetserver service:
