@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe 'reporting_servicenow' do
-  on_supported_os.each do |_os, os_facts|
-    context 'with default values for all parameters' do
+  on_supported_os.each do |os, os_facts|
+    context "with default values for all parameters on #{os}" do
       let(:pre_condition) do
         <<-EOF
         # mock pe_in_setting
@@ -27,15 +27,16 @@ describe 'reporting_servicenow' do
         }
         EOF
       end
+
       let(:facts) do
         os_facts.merge(
           'path' => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin:/root/bin',
         )
       end
-      
-      it {
-        is_expected.to compile
 
+      it { is_expected.to compile }
+
+      it do
         is_expected.to contain_pe_ini_setting('reporting_servicenow_enable_reports')
           .with(
             'ensure'  => 'present',
@@ -77,18 +78,29 @@ describe 'reporting_servicenow' do
           .with(
             'ensure' => 'present',
           )
+
         is_expected.to contain_package('gcc-c++')
           .with(
             'ensure' => 'present',
           )
+
         is_expected.to contain_package('libstdc++')
           .with(
             'ensure' => 'present',
           )
+
         is_expected.to contain_package('make')
           .with(
             'ensure' => 'present',
           )
+
+        is_expected.to contain_package('rest-client')
+          .with(
+            'ensure'   => '2.1.0',
+            'provider' => 'puppet_gem',
+          )
+          .that_notifies(['Exec[reset-gem-perms]', 'Service[pe-puppetserver]'])
+
         is_expected.to contain_package('rest-client-server')
           .with(
             'ensure'   => '2.1.0',
@@ -100,11 +112,13 @@ describe 'reporting_servicenow' do
         is_expected.to contain_exec('reset-gem-perms')
           .with(
             'path'        => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin:/root/bin',
-            'command'     => 'find /opt/puppetlabs/puppet/lib/ruby/gems/ -type d -exec chmod a+rx {} \; ; find /opt/puppetlabs/puppet/lib/ruby/gems/ -type f -exec chmod a+r {} \; ; chmod a+rx /opt/puppetlabs/puppet/bin/*', # lint:ignore:140chars
+            # rubocop:disable Metrics/LineLength
+            'command'     => 'find /opt/puppetlabs/puppet/lib/ruby/gems/ -type d -exec chmod a+rx {} \; ; find /opt/puppetlabs/puppet/lib/ruby/gems/ -type f -exec chmod a+r {} \; ; chmod a+rx /opt/puppetlabs/puppet/bin/*',
+            # rubocop:enable Metrics/LineLength
             'refreshonly' => true,
             'logoutput'   => true,
           )
-      }
+      end
     end
   end
 end
