@@ -10,6 +10,8 @@
 # https://docs.puppet.com/guides/tests_smoke.html
 #
 class { 'reporting_servicenow':
+  username       => 'admin',
+  password       => 'EYaml encrypted password',
   url            => 'https://exampleco.service-now.com/api/now/table/incident',
   puppet_console => 'https://puppetmaster.example.com',
 }

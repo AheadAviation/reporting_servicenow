@@ -1,0 +1,11 @@
+---
+spec/spec_helper.rb:
+  mock_with: ':rspec'
+  hiera_config: File.expand_path(File.join(__FILE__, '../fixtures/hiera.yaml'))
+  spec_overrides:
+    - 'RSpec.configure do |c|'
+    - "  c.after(:suite) do"
+    - "    RSpec::Puppet::Coverage.report!"
+    - "  end"
+    - "end"
+

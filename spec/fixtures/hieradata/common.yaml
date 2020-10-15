@@ -1,0 +1,17 @@
+---
+lookup_options:
+  '^reporting_servicenow::password$':
+    convert_to: 'Sensitive'
+
+reporting_servicenow::caller_id: 7816f79cc0a8017511c5a33be04be441
+
+reporting_servicenow::password: >
+    ENC[PKCS7,MIIBeQYJKoZIhvcNAQcDoIIBajCCAWYCAQAxggEhMIIBHQIBADAFMAACAQEw
+    DQYJKoZIhvcNAQEBBQAEggEAkwzo6TmG1nmM9KwXnWL/OUiQWmSqSB65SWyZ
+    yqxD++y437dpTdGj/6HBqTGsw3IfUU4mT0WsPHLCRapjc472wVhqK2kwyBaC
+    vJVXgBMmhCTT6NRs2aZvv1DzCUtdqKMYIuNKJ7D1vdXTUmx5772vBww+0T/S
+    ZTgrgh2Mqen3TgivF36Z94xnDZhdpXQAgl90h8X8qseRFa6KRDUm+Sl965nn
+    QLhM9strYQ2vtpDLM19ar4+Je+79RrRsjmY7Ac9fDI5/BDMhQ1qJ1+G2eCdo
+    loglj62vnC4gdgDpfhyD8n56Su+gNx7woFVaogspCKwKaKq8TODmFwPoxat+
+    9jQjtzA8BgkqhkiG9w0BBwEwHQYJYIZIAWUDBAEqBBCCOTHZWOUP0lanwiVx
+    7NFzgBC2FDjZLWQ9k0Jg9SmRTIPQ]

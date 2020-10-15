@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+RSpec.configure do |c|
+  c.mock_with :rspec
+end
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
 
@@ -34,6 +38,7 @@ end
 
 RSpec.configure do |c|
   c.default_facts = default_facts
+  c.hiera_config = File.expand_path(File.join(__FILE__, '../fixtures/hiera.yaml'))
   c.before :each do
     # set to strictest setting for testing
     # by default Puppet runs at warning level
@@ -55,3 +60,8 @@ def ensure_module_defined(module_name)
 end
 
 # 'spec_overrides' from sync.yml will appear below this line
+RSpec.configure do |c|
+  c.after(:suite) do
+    RSpec::Puppet::Coverage.report!
+  end
+end

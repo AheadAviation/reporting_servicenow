@@ -1,0 +1,16 @@
+# This file can be used to install module dependencies for unit testing
+# See https://github.com/puppetlabs/puppetlabs_spec_helper#using-fixtures for details
+---
+fixtures:
+  symlinks:
+    reporting_servicenow: "#{source_dir}"
+  forge_modules:
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "6.0.0"
+    concat:
+      repo: "puppetlabs/concat"
+      ref: "6.1.0"
+    puppetserver_gem:
+      repo: "puppetlabs/puppetserver_gem"
+      rf: "1.1.1"
