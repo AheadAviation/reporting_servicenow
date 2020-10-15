@@ -49,6 +49,7 @@ class reporting_servicenow (
   String $subcategory               = 'Operating System',
   String $caller_id                 = '',
   String $assignment_group          = 'Service Desk',
+  Boolean $auto_resolve_incident    = false,
 ) {
   pe_ini_setting { "${module_name}_enable_reports":
     ensure  => present,

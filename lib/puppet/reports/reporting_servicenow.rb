@@ -20,7 +20,9 @@ Puppet::Reports.register_report(:reporting_servicenow) do
   SUBCATEGORY = @config['subcategory']
   CALLERID = @config['caller_id']
   ASSIGNMENTGROUP = @config['assignment_group']
+  AUTORESOLVEINCIDENT = @config['auto_resolve_incidents']
 
+  # write debug output
   def debug(msg)
     timestamp = Time.now.utc.iso8601
     f = File.open('/var/log/puppetlabs/puppetserver/reporting_servicenow.log', 'a')
@@ -28,6 +30,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
     f.close
   end
 
+  # resolve incident as puppet fixed the config drift automatically
   def resolve_incident(incident_sys_id, username, password)
     request_close_body_map = {
       state: "6",
@@ -134,8 +137,10 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       created = response_data['result']['sys_created_on']
       debug("ServiceNOW Incident #{change_number} was created on #{created} (#{incident_sys_id})\n")
 
-      # resolve incident automatically
-      resolve_incident(incident_sys_id, SN_USERNAME.to_s, SN_PASSWORD.to_s)
+      if AUTORESOLVEINCIDENT
+        # resolve incident automatically
+        resolve_incident(incident_sys_id, SN_USERNAME.to_s, SN_PASSWORD.to_s)
+      end
 
     elsif e.response
       debug("ERROR incident create:\n#{e.response}\n-----\n")
