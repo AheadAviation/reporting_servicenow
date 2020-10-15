@@ -99,7 +99,6 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       created = response_data['result']['sys_created_on']
       debug("ServiceNOW Incident #{change_number} was created on #{created} (#{incident_sys_id})\n")
 
-      resolve_incident(incident_sys_id, SN_USERNAME.to_s, SN_PASSWORD.to_s)
       request_close_body_map = {
         state: "7",
         close_notes: "Closed by API (Closed/Resolved By Caller)",
