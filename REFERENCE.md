@@ -87,3 +87,19 @@ Data type: `String`
 
 Default value: 'Service Desk'
 
+##### `auto_resolve_incident`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### `incident_state`
+
+Data type: `Integer`
+
+
+
+Default value: 6
+

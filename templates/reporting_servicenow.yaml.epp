@@ -7,6 +7,7 @@ subcategory: <%= $reporting_servicenow::subcategory %>
 caller_id: <%= $reporting_servicenow::caller_id %>
 assignment_group: <%= $reporting_servicenow::assignment_group %>
 auto_resolve_incidents: <%= $reporting_servicenow::auto_resolve_incident %>
+incident_state: <%= $reporting_servicenow::incident_state %>
 # add servicenow username and password below
 username: <%= $reporting_servicenow::username %>
 password: <%= unwrap($reporting_servicenow::password) %>

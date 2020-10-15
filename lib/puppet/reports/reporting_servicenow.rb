@@ -21,6 +21,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
   CALLERID = @config['caller_id']
   ASSIGNMENTGROUP = @config['assignment_group']
   AUTORESOLVEINCIDENT = @config['auto_resolve_incidents']
+  SN_INCIDENTSTATE = @config['incident_state']
 
   # write debug output
   def debug(msg)
@@ -31,24 +32,24 @@ Puppet::Reports.register_report(:reporting_servicenow) do
   end
 
   # resolve incident as puppet fixed the config drift automatically
-  def resolve_incident(incident_sys_id, username, password)
+  def resolve_incident(incident_sys_id, incident_state, username, password)
     request_close_body_map = {
-      state: "6",
-      close_notes: "Resolved by API (Closed/Resolved By Caller)",
-      comments: "Incident for corrective change resolved automatically by Puppet",
+      state: incident_state,
+      close_notes: 'Resolved by API (Closed/Resolved By Caller)',
+      comments: 'Incident for corrective change resolved automatically by Puppet',
     }
 
     debug("payload resolve incident:\n#{request_close_body_map}\n-----\n")
     debug("Payload end\n-----\n")
     begin
-      url = "#{SN_URL.to_s}/#{incident_sys_id}"
+      url = "#{SN_URL}/#{incident_sys_id}"
       debug("incident resolve url: #{url}")
       response = RestClient.put(url.to_s,
-                                 request_close_body_map.to_json, # Encode the entire body as JSON
-                                 authorization: "Basic #{Base64.strict_encode64("#{username}:#{password}")}",
-                                 content_type:  'application/json',
-                                 accept:        'application/json',
-                                 timeout:       120)
+                                request_close_body_map.to_json, # Encode the entire body as JSON
+                                authorization: "Basic #{Base64.strict_encode64("#{username}:#{password}")}",
+                                content_type:  'application/json',
+                                accept:        'application/json',
+                                timeout:       120)
     rescue RestClient::ExceptionWithResponse => e
       e.response
     end
@@ -58,7 +59,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       response.headers.each { |k, v| debug("Header: #{k}=#{v}") }
       response_data = JSON.parse(response)
       debug("Response incident close:\n#{response_data.pretty_inspect}\n-----\n")
-      
+
     elsif e.response
       debug("ERROR incident close:\n#{e.response}\n-----\n")
     else
@@ -139,7 +140,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
 
       if AUTORESOLVEINCIDENT
         # resolve incident automatically
-        resolve_incident(incident_sys_id, SN_USERNAME.to_s, SN_PASSWORD.to_s)
+        resolve_incident(incident_sys_id, SN_INCIDENTSTATE, SN_USERNAME.to_s, SN_PASSWORD.to_s)
       end
 
     elsif e.response

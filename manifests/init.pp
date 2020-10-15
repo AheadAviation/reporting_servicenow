@@ -1,7 +1,7 @@
 # @summary Send corrective changes to ServiceNOW
 #
 # A crrective change will result in an incident in ServiceNOW. The incident will be prefilled with
-# the data below.
+# the data below. If configured, the incident can be closed automatically.
 #
 # @param username 
 #    ServieNow username, must be able to open incidents, defaults to 'admin'
@@ -30,6 +30,12 @@
 # @param assignment_group 
 #    ServiceNow incident assignment group, defaults to 'Service Desk'
 #
+# @param auto_resolve_incident
+#    Close the incident with incident_state
+#
+# @param incident_state
+#    ServiceNow state for incident close
+#
 # @example
 #   class { 'reporting_servicenow':
 #     username       => 'admin',
@@ -50,6 +56,7 @@ class reporting_servicenow (
   String $caller_id                 = '',
   String $assignment_group          = 'Service Desk',
   Boolean $auto_resolve_incident    = false,
+  Integer $incident_state           = 6,
 ) {
   pe_ini_setting { "${module_name}_enable_reports":
     ensure  => present,
