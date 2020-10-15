@@ -28,43 +28,6 @@ Puppet::Reports.register_report(:reporting_servicenow) do
     f.close
   end
 
-  def resolve_incident(sys_id, username, password)
-
-    request_body_map = {
-      state: "7",
-      close_notes: "Closed by API (Closed/Resolved By Caller)",
-      comments: "Incident for corrective change closed automatically by Puppet",
-    }
-
-    debug("payload resolve incident:\n#{request_body_map}\n-----\n")
-    debug("Payload end\n-----\n")
-    begin
-      url = "#{SN_URL.to_s}/#{sys_id}"
-      debug("incident resolve url: #{url}")
-      response = RestClient.put(url.to_s,
-                                 request_body_map.to_json, # Encode the entire body as JSON
-                                 authorization: "Basic #{Base64.strict_encode64("#{username}:#{password}")}",
-                                 content_type:  'application/json',
-                                 accept:        'application/json',
-                                 timeout:       120)
-    rescue RestClient::ExceptionWithResponse => e
-      e.response
-    end
-
-    if response
-      debug("Incident Close Response: #{response.pretty_inspect}")
-      response.headers.each { |k, v| debug("Header: #{k}=#{v}") }
-      response_data = JSON.parse(response)
-      debug("Response:\n#{response_data.pretty_inspect}")
-      created = response_data['result']['sys_created_on']
-      debug("ServiceNOW Incident #{change_number} was closed on #{created}\n-----\n")
-    elsif e.response
-      debug("ERROR incident close:\n#{e.response}\n-----\n")
-    else
-      debug('No response incident close!')
-    end
-  end
-
   def process
     # We only want to send a report if we have a corrective change
     real_status = (status == 'changed' && corrective_change == true) ? "#{status} (corrective)" : status.to_s
@@ -134,9 +97,41 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       change_number = response_data['result']['number']
       incident_sys_id = response_data['result']['sys_id']
       created = response_data['result']['sys_created_on']
-      debug("ServiceNOW Incident #{change_number} was created on #{created}\n")
+      debug("ServiceNOW Incident #{change_number} was created on #{created} (#{incident_sys_id})\n")
 
       resolve_incident(incident_sys_id, SN_USERNAME.to_s, SN_PASSWORD.to_s)
+      request_close_body_map = {
+        state: "7",
+        close_notes: "Closed by API (Closed/Resolved By Caller)",
+        comments: "Incident for corrective change closed automatically by Puppet",
+      }
+  
+      debug("payload resolve incident:\n#{request_close_body_map}\n-----\n")
+      debug("Payload end\n-----\n")
+      begin
+        url = "#{SN_URL.to_s}/#{incident_sys_id}"
+        debug("incident resolve url: #{url}")
+        response = RestClient.put(url.to_s,
+                                   request_close_body_map.to_json, # Encode the entire body as JSON
+                                   authorization: "Basic #{Base64.strict_encode64("#{SN_USERNAME}:#{SN_PASSWORD}")}",
+                                   content_type:  'application/json',
+                                   accept:        'application/json',
+                                   timeout:       120)
+      rescue RestClient::ExceptionWithResponse => e
+        e.response
+      end
+  
+      if response
+        debug("Incident Close Response: #{response.pretty_inspect}")
+        response.headers.each { |k, v| debug("Header: #{k}=#{v}") }
+        response_data = JSON.parse(response)
+        debug("Response incident close:\n#{response_data.pretty_inspect}\n-----\n")
+        
+      elsif e.response
+        debug("ERROR incident close:\n#{e.response}\n-----\n")
+      else
+        debug('No response incident close!')
+      end
 
     elsif e.response
       debug("ERROR incident create:\n#{e.response}\n-----\n")
