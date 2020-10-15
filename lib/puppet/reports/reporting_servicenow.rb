@@ -28,19 +28,19 @@ Puppet::Reports.register_report(:reporting_servicenow) do
     f.close
   end
 
-  def resolve_incident(sys_id, caller_id, username, password)
+  def resolve_incident(sys_id, username, password)
 
     request_body_map = {
-      close_code: "Closed/Resolved By Caller",
       state: "7",
-      caller_id: "#{caller_id}",
-      close_notes: "Closed by API",
+      close_notes: "Closed by API (Closed/Resolved By Caller)",
       comments: "Incident for corrective change closed automatically by Puppet",
     }
 
     debug("payload resolve incident:\n#{request_body_map}\n-----\n")
+    debug("Payload end\n-----\n")
     begin
       url = "#{SN_URL.to_s}/#{sys_id}"
+      debug("incident resolve url: #{url}")
       response = RestClient.put(url.to_s,
                                  request_body_map.to_json, # Encode the entire body as JSON
                                  authorization: "Basic #{Base64.strict_encode64("#{username}:#{password}")}",
@@ -59,9 +59,9 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       created = response_data['result']['sys_created_on']
       debug("ServiceNOW Incident #{change_number} was closed on #{created}\n-----\n")
     elsif e.response
-      debug("ERROR:\n#{e.response}\n-----\n")
+      debug("ERROR incident close:\n#{e.response}\n-----\n")
     else
-      debug('No response!')
+      debug('No response incident close!')
     end
   end
 
@@ -114,6 +114,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
     }
 
     debug("payload:\n#{request_body_map}\n-----\n")
+    debug("Payload end\n-----\n")
     begin
       response = RestClient.post(SN_URL.to_s,
                                  request_body_map.to_json, # Encode the entire body as JSON
@@ -135,12 +136,12 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       created = response_data['result']['sys_created_on']
       debug("ServiceNOW Incident #{change_number} was created on #{created}\n")
 
-      resolve_incident(incident_sys_id, CALLERID.to_s, SN_USERNAME, SN_PASSWORD)
+      resolve_incident(incident_sys_id, SN_USERNAME.to_s, SN_PASSWORD.to_s)
 
     elsif e.response
-      debug("ERROR:\n#{e.response}\n-----\n")
+      debug("ERROR incident create:\n#{e.response}\n-----\n")
     else
-      debug('No response!')
+      debug('No response for incident create!')
     end
   end
 end
