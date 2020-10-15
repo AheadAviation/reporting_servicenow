@@ -28,6 +28,44 @@ Puppet::Reports.register_report(:reporting_servicenow) do
     f.close
   end
 
+  def resolve_incident(sys_id, caller_id)
+    request_body_map = {
+      close_code: "Closed/Resolved By Caller",
+      state: "7",
+      caller_id: "#{caller_id}",
+      close_notes: "Closed by API",
+      comments: "Incident for corrective change closed automatically by Puppet",
+    }
+
+    debug("payload:\n#{request_body_map}\n-----\n")
+    begin
+      url = "#{SN_URL.to_s}/#{sys_id}"
+      response = RestClient.put(url.to_s,
+                                 request_body_map.to_json, # Encode the entire body as JSON
+                                 authorization: "Basic #{Base64.strict_encode64("#{SN_USERNAME}:#{SN_PASSWORD}")}",
+                                 content_type:  'application/json',
+                                 accept:        'application/json',
+                                 timeout:       120)
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
+
+    if response
+      debug("Response: #{response.pretty_inspect}")
+      response.headers.each { |k, v| debug("Header: #{k}=#{v}") }
+      response_data = JSON.parse(response)
+      debug("Response:\n#{response_data.pretty_inspect}")
+      change_number = response_data['result']['number']
+      incident_sys_id = response_data['result']['sys_id']
+      created = response_data['result']['sys_created_on']
+      debug("ServiceNOW Incident #{change_number} was created on #{created}\n")
+    elsif e.response
+      debug("ERROR:\n#{e.response}\n-----\n")
+    else
+      debug('No response!')
+    end
+  end
+
   def process
     # We only want to send a report if we have a corrective change
     real_status = (status == 'changed' && corrective_change == true) ? "#{status} (corrective)" : status.to_s
@@ -94,8 +132,12 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       response_data = JSON.parse(response)
       debug("Response:\n#{response_data.pretty_inspect}")
       change_number = response_data['result']['number']
+      incident_sys_id = response_data['result']['sys_id']
       created = response_data['result']['sys_created_on']
-      debug("ServiceNOW Change #{change_number} was created on #{created}\n")
+      debug("ServiceNOW Incident #{change_number} was created on #{created}\n")
+
+      resolve_incident(incident_sys_id, CALLERID.to_s)
+      
     elsif e.response
       debug("ERROR:\n#{e.response}\n-----\n")
     else
