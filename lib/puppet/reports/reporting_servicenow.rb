@@ -140,7 +140,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
 
       if AUTORESOLVEINCIDENT
         # resolve incident automatically
-        resolve_incident(incident_sys_id, SN_INCIDENTSTATE, SN_USERNAME.to_s, SN_PASSWORD.to_s)
+        resolve_incident(incident_sys_id, SN_INCIDENTSTATE.to_s, SN_USERNAME.to_s, SN_PASSWORD.to_s)
       end
 
     elsif e.response
