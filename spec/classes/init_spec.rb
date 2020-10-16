@@ -73,6 +73,8 @@ describe 'reporting_servicenow' do
           .with_content(%r{subcategory: Operating System})
           .with_content(%r{caller_id: 7816f79cc0a8017511c5a33be04be441})
           .with_content(%r{assignment_group: Service Desk})
+          .with_content(%r{auto_resolve_incidents: false})
+          .with_content(%r{incident_state: 6})
 
         is_expected.to contain_package('gcc')
           .with(
