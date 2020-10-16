@@ -5,37 +5,57 @@
 
 **Classes**
 
-* [`reporting_servicenow`](#reporting_servicenow): 
+* [`reporting_servicenow`](#reporting_servicenow): Create incidents in ServiceNOW to document corrective changes
 
 ## Classes
 
 ### reporting_servicenow
 
-The reporting_servicenow class.
+A corrective change will result in an incident in ServiceNOW. The incident will be prefilled with
+the data below. If configured, the incident can be closed automatically.
+
+#### Examples
+
+##### 
+
+```puppet
+class { 'reporting_servicenow':
+  username              => 'admin',
+  password              => 'EYaml encrypted very secret password',
+  url                   => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
+  puppet_console        => 'https://<YOUR CONSOLE HERE>',
+  debug                 => false,
+  category              => 'my category',
+  subcategory           => 'my subcategory',
+  assignment_group      => 'Service Desk',
+  auto_resolve_incident => true,
+  incident_state        => 6,
+}
+```
 
 #### Parameters
 
 The following parameters are available in the `reporting_servicenow` class.
 
-##### `password`
-
-Data type: `Sensitive[String]`
-
-
-
 ##### `username`
 
 Data type: `String`
 
-
+ServieNow username, must be able to open incidents, defaults to 'admin'
 
 Default value: 'admin'
+
+##### `password`
+
+Data type: `Sensitive[String]`
+
+ServiceNow password for the above user, needs to be eyaml encrypted
 
 ##### `url`
 
 Data type: `Stdlib::Httpsurl`
 
-
+SewrviceNow URL for API integration
 
 Default value: 'https://instance.service-now.com/api/now/table/incident'
 
@@ -43,7 +63,7 @@ Default value: 'https://instance.service-now.com/api/now/table/incident'
 
 Data type: `Stdlib::Httpsurl`
 
-
+URL of the Puppet Console
 
 Default value: 'https://puppet.example.com'
 
@@ -51,7 +71,7 @@ Default value: 'https://puppet.example.com'
 
 Data type: `Boolean`
 
-
+optional flag to activate debugging messages
 
 Default value: `false`
 
@@ -59,7 +79,7 @@ Default value: `false`
 
 Data type: `String`
 
-
+ServiceNow incident category, defaults to 'software'
 
 Default value: 'software'
 
@@ -67,7 +87,7 @@ Default value: 'software'
 
 Data type: `String`
 
-
+ServiceNow incident subcategory, defaults to 'Operating System'
 
 Default value: 'Operating System'
 
@@ -75,7 +95,7 @@ Default value: 'Operating System'
 
 Data type: `String`
 
-
+ServiceNow user sys_id for the user to be inserted as caller
 
 Default value: ''
 
@@ -83,7 +103,7 @@ Default value: ''
 
 Data type: `String`
 
-
+ServiceNow incident assignment group, defaults to 'Service Desk'
 
 Default value: 'Service Desk'
 
@@ -91,7 +111,9 @@ Default value: 'Service Desk'
 
 Data type: `Boolean`
 
-
+Close the incident with incident_state. Puppet's corrective change fixed the configuration
+drift and the incident documents the issue. Therefore the incident can be resolved or closed
+automatically.
 
 Default value: `false`
 
@@ -99,7 +121,7 @@ Default value: `false`
 
 Data type: `Integer`
 
-
+ServiceNow state for incident close
 
 Default value: 6
 
