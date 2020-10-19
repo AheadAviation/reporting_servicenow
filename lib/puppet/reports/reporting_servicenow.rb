@@ -22,6 +22,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
   ASSIGNMENTGROUP = @config['assignment_group']
   AUTORESOLVEINCIDENT = @config['auto_resolve_incidents']
   SN_INCIDENTSTATE = @config['incident_state']
+  PE_REPORTING_URL_PART = @config['pe_reporting_url_part']
 
   # write debug output
   def debug(msg)
@@ -93,6 +94,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       line = line.to_s + "#{log.time} #{log.level} #{log.message}\n"
     end
 
+    reporting_url = "#{PUPPETCONSOLE}#{PE_REPORTING_URL_PART}/#{host}/reports"
     request_body_map = {
       type: 'Standard',
       short_description: "Puppet Corrective Change on #{host}",
@@ -112,7 +114,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
       u_risk_resources: '2',
       u_risk_backout: '3',
       u_risk_complex: '1',
-      work_notes: "Node Reports: [code]<a class='web' target='_blank' href='#{PUPPETCONSOLE}/#/inventory/node/#{host}/reports'>Reports</a>[/code]\n#{line}",
+      work_notes: "Node Reports: [code]<a class='web' target='_blank' href='#{reporting_url}'>Reports</a>[/code]\n#{line}",
     }
 
     debug("payload:\n#{request_body_map}\n-----\n")

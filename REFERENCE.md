@@ -30,6 +30,7 @@ class { 'reporting_servicenow':
   assignment_group      => 'Service Desk',
   auto_resolve_incident => true,
   incident_state        => 6,
+  pe_reporting_url_part => '/#/enforcement/node'
 }
 ```
 
@@ -124,4 +125,12 @@ Data type: `Integer`
 ServiceNow state for incident close
 
 Default value: 6
+
+##### `pe_reporting_url_part`
+
+Data type: `String`
+
+PE reoprting url part
+
+Default value: '/#/enforcement/node'
 

@@ -39,6 +39,9 @@
 # @param incident_state
 #    ServiceNow state for incident close
 #
+# @param pe_reporting_url_part
+#    PE reoprting url part
+#
 # @example
 #   class { 'reporting_servicenow':
 #     username              => 'admin',
@@ -51,6 +54,7 @@
 #     assignment_group      => 'Service Desk',
 #     auto_resolve_incident => true,
 #     incident_state        => 6,
+#     pe_reporting_url_part => '/#/enforcement/node'
 #   }
 #   
 class reporting_servicenow (
@@ -65,6 +69,7 @@ class reporting_servicenow (
   String $assignment_group          = 'Service Desk',
   Boolean $auto_resolve_incident    = false,
   Integer $incident_state           = 6,
+  String $pe_reporting_url_part     = '/#/enforcement/node'
 ) {
   pe_ini_setting { "${module_name}_enable_reports":
     ensure  => present,
