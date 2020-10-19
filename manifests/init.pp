@@ -69,7 +69,7 @@ class reporting_servicenow (
   String $assignment_group          = 'Service Desk',
   Boolean $auto_resolve_incident    = false,
   Integer $incident_state           = 6,
-  String $pe_reporting_url_part     = '/#/enforcement/node'
+  String $pe_reporting_url_part     = '/#/inventory/node'
 ) {
   pe_ini_setting { "${module_name}_enable_reports":
     ensure  => present,
