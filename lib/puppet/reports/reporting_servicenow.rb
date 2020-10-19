@@ -95,6 +95,7 @@ Puppet::Reports.register_report(:reporting_servicenow) do
     end
 
     reporting_url = "#{PUPPETCONSOLE}#{PE_REPORTING_URL_PART}/#{host}/reports"
+    debug("reporting url: #{reporting_url}")
     request_body_map = {
       type: 'Standard',
       short_description: "Puppet Corrective Change on #{host}",
