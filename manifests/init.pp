@@ -1,6 +1,7 @@
-# @summary Send corrective changes to ServiceNOW
+# @summary 
+#    Create incidents in ServiceNOW to document corrective changes
 #
-# A crrective change will result in an incident in ServiceNOW. The incident will be prefilled with
+# A corrective change will result in an incident in ServiceNOW. The incident will be prefilled with
 # the data below. If configured, the incident can be closed automatically.
 #
 # @param username 
@@ -31,20 +32,31 @@
 #    ServiceNow incident assignment group, defaults to 'Service Desk'
 #
 # @param auto_resolve_incident
-#    Close the incident with incident_state
+#    Close the incident with incident_state. Puppet's corrective change fixed the configuration
+#    drift and the incident documents the issue. Therefore the incident can be resolved or closed
+#    automatically.
 #
 # @param incident_state
 #    ServiceNow state for incident close
 #
+# @param pe_reporting_url_part
+#    PE reoprting url part
+#
 # @example
 #   class { 'reporting_servicenow':
-#     username       => 'admin',
-#     password       => 'EYaml encrypted very secret password',
-#     url            => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
-#     puppet_console => 'https://<YOUR CONSOLE HERE>',
+#     username              => 'admin',
+#     password              => 'EYaml encrypted very secret password',
+#     url                   => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
+#     puppet_console        => 'https://<YOUR CONSOLE HERE>',
+#     debug                 => false,
+#     category              => 'my category',
+#     subcategory           => 'my subcategory',
+#     assignment_group      => 'Service Desk',
+#     auto_resolve_incident => true,
+#     incident_state        => 6,
+#     pe_reporting_url_part => '/#/enforcement/node'
 #   }
 #   
-
 class reporting_servicenow (
   Sensitive[String] $password,
   String $username                  = 'admin',
@@ -57,6 +69,7 @@ class reporting_servicenow (
   String $assignment_group          = 'Service Desk',
   Boolean $auto_resolve_incident    = false,
   Integer $incident_state           = 6,
+  String $pe_reporting_url_part     = '/#/inventory/node'
 ) {
   pe_ini_setting { "${module_name}_enable_reports":
     ensure  => present,

@@ -30,7 +30,6 @@ On the Puppet Master, this module:
 reporting_servicenow requires the rest-client gem.  This will be installed as part of the class, along
 with the supporting libraries and compilers need to build it.
 
-
 ### Beginning with reporting_servicenow
 
 There are 4 steps to the reporting_servicenow configuration:
@@ -39,11 +38,13 @@ There are 4 steps to the reporting_servicenow configuration:
 
 ```puppet
 class { 'reporting_servicenow':
-  username       => 'your user',
-  password       => 'eyaml encrypted password',
-  url            => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
-  puppet_console => 'https://<YOUR CONSOLE HERE>',
-  caller_id      => '7816f79cc0a8017511c5a33be04be441',
+  username               => 'your user',
+  password               => 'eyaml encrypted password',
+  url                    => 'https://<YOUR SERVICENOW INSTANCE HERE>/api/now/table/incident',
+  puppet_console         => 'https://<YOUR CONSOLE HERE>',
+  caller_id              => '7816f79cc0a8017511c5a33be04be441',
+  auto_resolve_incidents => true
+  incident_state         => 6
 }
 ```
 
@@ -57,6 +58,8 @@ debug: false
 category: 'software'
 subcategory: 'Operating System'
 caller_id: '7816f79cc0a8017511c5a33be04be441'
+auto_resolve_incidents: true
+incident_state: 6
 # add servicenow username and password below
 username: 'your user'
 password: 'Eyaml decrypted password'
@@ -74,6 +77,8 @@ debug: false
 category: 'software'
 subcategory: 'Operating System'
 caller_id: '7816f79cc0a8017511c5a33be04be441'
+auto_resolve_incidents: true
+incident_state: 6
 # add servicenow username and password below
 username: 'your user'
 password: 'Eyaml decrypted password'
